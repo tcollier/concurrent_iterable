@@ -23,14 +23,21 @@ Or install it yourself as:
 ## Usage
 
 ```ruby
-def remote_operation(remote_id)
-  # some expensive code
+def fetch_resource(remote_id)
+  # slow operation to fetch resource over the network
+end
+
+def remote_operation(resource, action)
+  # other slow operator to perform a remote action on the resource
 end
 
 remote_ids = [1, 2, 3]
 
-iterator = ConcurrentIterable::Iterator.new(remote_ids)
-iterator.each { |remote_id| remote_operation(remote_id) }
+ids_iterator = ConcurrentIterable::Iterator.new(remote_ids)
+resources = ids_iterator.map(&method(:fetch_resource))
+
+resources_iterator = ConcurrentIterable::Iterator.new(resources)
+resources_iterator.each { |resource| remote_operation(resource, :publish) }
 ```
 
 ### Configuration
@@ -46,7 +53,7 @@ end
 Or on a case-by-case basis
 
 ```ruby
-ConcurrentIterable::Iterator.new(remote_ids, concurrency: 25).each { ... }
+ConcurrentIterable::Iterator.new(remote_ids, concurrency: 25).map { ... }
 ```
 
 ## Development
