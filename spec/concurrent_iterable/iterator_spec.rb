@@ -122,4 +122,35 @@ RSpec.describe ConcurrentIterable::Iterator do
       expect(mapped).to eq([1, 2])
     end
   end
+
+  describe '#all?' do
+    context 'when all items evaluate to truthy' do
+      it 'returns true' do
+        def evaluator(item)
+          sleep 0.001
+          true
+        end
+        expect(subject.all?(&method(:evaluator))).to eq(true)
+      end
+    end
+
+    context 'when one item evaluates to falsy' do
+      let(:concurrency) { 1 }
+
+      it 'returns false' do
+        def evaluator(item)
+          sleep 0.001
+          item == 1 ? false : true
+        end
+        expect(subject.all?(&method(:evaluator))).to eq(false)
+      end
+
+      it 'short-circuits later groups' do
+        evaluated = Set.new
+        result = subject.all? { |item| evaluated << item; false }
+        expect(result).to eq(false)
+        expect(evaluated).to_not include(2)
+      end
+    end
+  end
 end

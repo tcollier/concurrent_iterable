@@ -31,6 +31,8 @@ instance to expose the standard enumerable methods that evaluate concurrently
 
 The following iterable/enumerable methods are available
 
+##### `#all?(&block)`
+
 ##### `#detect(&block)`
 
 ##### `#each(&block)`
