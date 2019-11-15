@@ -29,6 +29,24 @@ module ConcurrentIterable
       result
     end
 
+    def detect(&block)
+      result = nil
+      iterable.each_slice(concurrency).each.with_index do |group, group_index|
+        results = Concurrent::Array.new(group.length)
+        group.length.times.map do |index|
+          Concurrent::Promises.future(executor) do
+            results[index] = yield group[index]
+          end
+        end.each(&:wait!)
+        found_index = results.index(&:itself)
+        if found_index
+          result = iterable[group_index * concurrency + found_index]
+          break
+        end
+      end
+      result
+    end
+
     private
 
     attr_reader :iterable, :concurrency, :executor
