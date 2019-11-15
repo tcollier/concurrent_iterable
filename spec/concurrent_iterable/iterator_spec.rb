@@ -10,11 +10,11 @@ RSpec.describe ConcurrentIterable::Iterator do
     timer
   end
 
+  subject { described_class.new([1, 2], concurrency: concurrency) }
+
+  let(:concurrency) { 2 }
+
   describe '#each' do
-    subject { described_class.new([1, 2], concurrency: concurrency) }
-
-    let(:concurrency) { 2 }
-
     it 'yields every item in the iterable' do
       yielded = Concurrent::Array.new
       subject.each { |item| yielded << item }
@@ -40,10 +40,6 @@ RSpec.describe ConcurrentIterable::Iterator do
   end
 
   describe '#map' do
-    subject { described_class.new([1, 2], concurrency: concurrency) }
-
-    let(:concurrency) { 2 }
-
     it 'yields every item in the iterable' do
       mapped = subject.map(&:itself)
       expect(mapped).to eq([1, 2])
@@ -76,10 +72,6 @@ RSpec.describe ConcurrentIterable::Iterator do
   end
 
   describe '#detect' do
-    subject { described_class.new([1, 2], concurrency: concurrency) }
-
-    let(:concurrency) { 2 }
-
     it 'returns the lowest-indexed truthy item' do
       def detector(item)
         duration = item == 1 ? 0.01 : 0.001
