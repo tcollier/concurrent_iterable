@@ -46,12 +46,12 @@ RSpec.describe ConcurrentIterable::Iterator do
     end
 
     it 'maintains order in the iterable' do
-      def sleeper(item)
+      def mapper(item)
         duration = item == 1 ? 0.01 : 0.001
         sleep duration
         item
       end
-      mapped = subject.map(&method(:sleeper))
+      mapped = subject.map(&method(:mapper))
       expect(mapped).to eq([1, 2])
     end
 
