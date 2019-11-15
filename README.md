@@ -69,15 +69,21 @@ You can set the configuration globally
 
 ```ruby
 ConcurrentIterable.configure do |config|
-  config.concurrency = <number of concurrent executions, defaults to 10>
+  config.concurrency = 15
 end
 ```
 
-Or on a case-by-case basis
+Or on a case-by-case basis, this overrides the global setting.
 
 ```ruby
 ConcurrentIterable::Iterator.new(remote_ids, concurrency: 25).map { ... }
 ```
+
+#### `concurrency`
+
+_Defaults to 10_
+
+The number of items in the iterable that are evaluated in the given block concurrently.
 
 ## Development
 
