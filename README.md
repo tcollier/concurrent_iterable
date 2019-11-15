@@ -31,11 +31,13 @@ instance to expose the standard enumerable methods that evaluate concurrently
 
 The following iterable/enumerable methods are available
 
+##### `#detect(&block)`
+
 ##### `#each(&block)`
 
 ##### `#map(&block)`
 
-##### `#detect(&block)`
+##### `#select(&block)`
 
 ### Examples
 

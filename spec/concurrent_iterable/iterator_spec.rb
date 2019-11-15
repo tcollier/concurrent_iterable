@@ -10,11 +10,11 @@ RSpec.describe ConcurrentIterable::Iterator do
     timer
   end
 
+  subject { described_class.new([1, 2], concurrency: concurrency) }
+
+  let(:concurrency) { 2 }
+
   describe '#each' do
-    subject { described_class.new([1, 2], concurrency: concurrency) }
-
-    let(:concurrency) { 2 }
-
     it 'yields every item in the iterable' do
       yielded = Concurrent::Array.new
       subject.each { |item| yielded << item }
@@ -40,22 +40,18 @@ RSpec.describe ConcurrentIterable::Iterator do
   end
 
   describe '#map' do
-    subject { described_class.new([1, 2], concurrency: concurrency) }
-
-    let(:concurrency) { 2 }
-
     it 'yields every item in the iterable' do
       mapped = subject.map(&:itself)
       expect(mapped).to eq([1, 2])
     end
 
     it 'maintains order in the iterable' do
-      def sleeper(item)
+      def mapper(item)
         duration = item == 1 ? 0.01 : 0.001
         sleep duration
         item
       end
-      mapped = subject.map(&method(:sleeper))
+      mapped = subject.map(&method(:mapper))
       expect(mapped).to eq([1, 2])
     end
 
@@ -76,10 +72,6 @@ RSpec.describe ConcurrentIterable::Iterator do
   end
 
   describe '#detect' do
-    subject { described_class.new([1, 2], concurrency: concurrency) }
-
-    let(:concurrency) { 2 }
-
     it 'returns the lowest-indexed truthy item' do
       def detector(item)
         duration = item == 1 ? 0.01 : 0.001
@@ -106,6 +98,28 @@ RSpec.describe ConcurrentIterable::Iterator do
         expect(found).to eq(1)
         expect(evaluated).to_not include(2)
       end
+    end
+  end
+
+  describe '#select' do
+    it 'selects items where the block evaluates to truthy' do
+      def selector(item)
+        duration = item == 1 ? 0.01 : 0.001
+        sleep duration
+        item % 2 == 0
+      end
+      mapped = subject.select(&method(:selector))
+      expect(mapped).to eq([2])
+    end
+
+    it 'maintains order in the iterable' do
+      def selector(item)
+        duration = item == 1 ? 0.01 : 0.001
+        sleep duration
+        true
+      end
+      mapped = subject.select(&method(:selector))
+      expect(mapped).to eq([1, 2])
     end
   end
 end
