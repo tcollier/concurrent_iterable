@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 0.2.0
+
+_2019-11-14_
+
+* [17a33ac](https://github.com/tcollier/concurrent_iterable/commit/17a33ac27fd8a6316de4a9de96dc141fd7c47816) - Add `#map`
+
 ## Version 0.1.0
 
 _2019-11-14_
