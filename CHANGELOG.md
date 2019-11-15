@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 0.3.0
+
+_2019-11-14_
+
+* [132851e](https://github.com/tcollier/concurrent_iterable/commit/132851e684810eb550d5bfb5e7bfcd1e5aded28f) - Add `#detect`
+
 ## Version 0.2.0
 
 _2019-11-14_
