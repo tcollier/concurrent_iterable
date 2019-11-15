@@ -100,4 +100,26 @@ RSpec.describe ConcurrentIterable::Iterator do
       end
     end
   end
+
+  describe '#select' do
+    it 'selects items where the block evaluates to truthy' do
+      def selector(item)
+        duration = item == 1 ? 0.01 : 0.001
+        sleep duration
+        item % 2 == 0
+      end
+      mapped = subject.select(&method(:selector))
+      expect(mapped).to eq([2])
+    end
+
+    it 'maintains order in the iterable' do
+      def selector(item)
+        duration = item == 1 ? 0.01 : 0.001
+        sleep duration
+        true
+      end
+      mapped = subject.select(&method(:selector))
+      expect(mapped).to eq([1, 2])
+    end
+  end
 end

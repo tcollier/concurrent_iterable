@@ -37,6 +37,8 @@ The following iterable/enumerable methods are available
 
 ##### `#map(&block)`
 
+##### `#select(&block)`
+
 ### Examples
 
 ```ruby
