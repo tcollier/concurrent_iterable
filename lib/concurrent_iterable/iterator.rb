@@ -80,6 +80,23 @@ module ConcurrentIterable
       !missing
     end
 
+    def any?(&block)
+      found = false
+      iterable.each_slice(concurrency).each.with_index do |group, group_index|
+        results = Concurrent::Array.new(group.length)
+        group.length.times.map do |index|
+          Concurrent::Promises.future(executor) do
+            results[index] = yield group[index]
+          end
+        end.each(&:wait!)
+        if results.index(&:itself)
+          found = true
+          break
+        end
+      end
+      found
+    end
+
     private
 
     attr_reader :iterable, :concurrency, :executor

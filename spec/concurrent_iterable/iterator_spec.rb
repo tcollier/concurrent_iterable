@@ -153,4 +153,35 @@ RSpec.describe ConcurrentIterable::Iterator do
       end
     end
   end
+
+  describe '#any?' do
+    context 'when no item evaluates to truthy' do
+      it 'returns true' do
+        def evaluator(item)
+          sleep 0.001
+          false
+        end
+        expect(subject.any?(&method(:evaluator))).to eq(false)
+      end
+    end
+
+    context 'when one item evaluates to truthy' do
+      let(:concurrency) { 1 }
+
+      it 'returns true' do
+        def evaluator(item)
+          sleep 0.001
+          item == 1 ? false : true
+        end
+        expect(subject.any?(&method(:evaluator))).to eq(true)
+      end
+
+      it 'short-circuits later groups' do
+        evaluated = Set.new
+        result = subject.any? { |item| evaluated << item; true }
+        expect(result).to eq(true)
+        expect(evaluated).to_not include(2)
+      end
+    end
+  end
 end

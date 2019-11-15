@@ -33,6 +33,8 @@ The following iterable/enumerable methods are available
 
 ##### `#all?(&block)`
 
+##### `#any?(&block)`
+
 ##### `#detect(&block)`
 
 ##### `#each(&block)`
