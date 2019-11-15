@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = ConcurrentIterable::VERSION
   spec.authors       = ['Tom Collier']
   spec.email         = ['collier@apartmentlist.com']
-
+  spec.homepage      = 'https://github.com/tcollier/concurrent_iterable'
   spec.summary       = %q{Concurrently evaluate items in an iterable}
   spec.license       = 'MIT'
 
