@@ -1,8 +1,6 @@
 # ConcurrentIterable
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/concurrent_iterable`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Concurrently iterate through an iterable object
 
 ## Installation
 
@@ -22,7 +20,32 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+def remote_operation(remote_id)
+  # some expensive code
+end
+
+remote_ids = [1, 2, 3]
+
+iterator = ConcurrentIterable::Iterator.new(remote_ids)
+iterator.each { |remote_id| remote_operation(remote_id) }
+```
+
+### Configuration
+
+You can set the configuration globally
+
+```ruby
+ConcurrentIterable.configure do |config|
+  config.concurrency = <number of concurrent executions, defaults to 10>
+end
+```
+
+Or on a case-by-case basis
+
+```ruby
+ConcurrentIterable::Iterator.new(remote_ids, concurrency: 25).each { ... }
+```
 
 ## Development
 
