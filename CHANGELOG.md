@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 0.4.1
+
+_2019-11-15_
+
+* [60d5f44](https://github.com/tcollier/concurrent_iterable/commit/60d5f44a7bd7de8b65c90e5ba87943b61228cd99) - Add link to homepage in gemspec
+
 ## Version 0.4.0
 
 _2019-11-14_
