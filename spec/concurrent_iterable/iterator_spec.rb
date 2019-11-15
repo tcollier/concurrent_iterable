@@ -1,3 +1,5 @@
+require 'set'
+
 RSpec.describe ConcurrentIterable::Iterator do
   Timer = Struct.new(:start_time, :end_time)
 
@@ -69,6 +71,40 @@ RSpec.describe ConcurrentIterable::Iterator do
       it 'yields in groups based on concurrency' do
         mapped = subject.map { |item| create_timer }
         expect(mapped[0].end_time).to be < mapped[1].start_time
+      end
+    end
+  end
+
+  describe '#detect' do
+    subject { described_class.new([1, 2], concurrency: concurrency) }
+
+    let(:concurrency) { 2 }
+
+    it 'returns the lowest-indexed truthy item' do
+      def detector(item)
+        duration = item == 1 ? 0.01 : 0.001
+        sleep duration
+        true
+      end
+      found = subject.detect(&method(:detector))
+      expect(found).to eq(1)
+    end
+
+    context 'when no item is truthy' do
+      it 'returns nil' do
+        found = subject.detect { nil }
+        expect(found).to be_nil
+      end
+    end
+
+    context 'when the iterable has more items that the concurrency' do
+      let(:concurrency) { 1 }
+
+      it 'short-circuits later groups' do
+        evaluated = Set.new
+        found = subject.detect { |item| evaluated << item; true }
+        expect(found).to eq(1)
+        expect(evaluated).to_not include(2)
       end
     end
   end

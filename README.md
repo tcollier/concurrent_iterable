@@ -22,6 +22,23 @@ Or install it yourself as:
 
 ## Usage
 
+### Initializer
+
+Wrap any iterable (e.g. `Array`, `Hash`, or `Set`) in a `ConcurrentIterable::Iterator`
+instance to expose the standard enumerable methods that evaluate concurrently
+
+### Methods
+
+The following iterable/enumerable methods are available
+
+##### `#each(&block)`
+
+##### `#map(&block)`
+
+##### `#detect(&block)`
+
+### Examples
+
 ```ruby
 def fetch_resource(remote_id)
   # slow operation to fetch resource over the network
