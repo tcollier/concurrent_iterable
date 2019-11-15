@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/tcollier/concurrent_iterable.svg?branch=master)](https://travis-ci.com/tcollier/concurrent_iterable)
+
 # ConcurrentIterable
 
 Concurrently iterate through an iterable object
